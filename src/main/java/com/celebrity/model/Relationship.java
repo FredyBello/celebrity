@@ -1,5 +1,14 @@
 package com.celebrity.model;
 
+
+/**
+ * @author fredy.orlando
+ * 
+ * Relationship class is used to reprsent the relations between Team members
+ * 
+ * A member knows to another person
+ * 
+ */
 public class Relationship {
 
    Person member;

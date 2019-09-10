@@ -1,7 +1,11 @@
 package com.celebrity.model;
 
-import java.util.Objects;
 
+/**
+ * @author fredy.orlando
+ *
+ * The Person class represent a Person with a name
+ */
 public class Person {
     private final String name;
 
@@ -13,19 +17,4 @@ public class Person {
         return name;
     }
     
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
-    
-    @Override
-    public boolean equals(Object o) {
-
-        if (o == this) return true;
-        if (!(o instanceof Person)) {
-            return false;
-        }
-        Person otherUser = (Person) o;
-        return Objects.equals(name, otherUser.name);
-    }
 }

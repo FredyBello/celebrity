@@ -2,6 +2,15 @@ package com.celebrity.model;
 
 import java.util.ArrayList;
 
+
+/**
+ * @author fredy.orlando
+ *
+ * Team class represent the team container
+ * 
+ * It has references to members and relationships beteween them 
+ * 
+ */
 public class Team {
    
    ArrayList<Person> members = new ArrayList<Person>();

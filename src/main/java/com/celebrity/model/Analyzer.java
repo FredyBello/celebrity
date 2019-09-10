@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+
+/**
+ * @author fredy.orlando
+ * 
+ * Analyzer Class is used to determine the team's Celebrity, if present
+ * 
+ */
 public class Analyzer {
 
    private Team team;
@@ -20,20 +27,30 @@ public class Analyzer {
       this.team = team;
    }
 
+   
+   /**
+    * @return the celebrity name if itis found, othrwise returns result status
+    */
    public String getCelebrityName() {
       String celebrityName = "UNDEFINED";
-
-      ArrayList<Set<Person>> eachMemberKnownPersons = getEachMemberKnownPersonsSet();
+      ArrayList<Set<Person>> eachMemberKnownPersons = getEachMemberKnownPersons();
+      // List of persons that are known by everyone
       Set<Person> celebrityCandidates = getCelebrityCandidates(eachMemberKnownPersons);
-      
-      if(celebrityCandidates.size()==0){
-         celebrityName = "IT DOES NOT EXIST";
-      }else if(celebrityCandidates.size()==1){
-         celebrityName = celebrityCandidates.iterator().next().getName();
-      }else{
-         //
+
+      if (celebrityCandidates.size() == 0) {
+         celebrityName = "ZERO CELEBRITIES CANDIDATES FOUND";
+      } else if (celebrityCandidates.size() == 1) {
+         Person candidateCelebrity = celebrityCandidates.iterator().next();
+         if (getAllPersonsWhoKnowSomebody().contains(candidateCelebrity)) {
+            celebrityName = "THE CANDIDATE CELEBRITY HAS AT LEAST ONE KNOWN PERSON";
+         } else {
+            celebrityName = celebrityCandidates.iterator().next().getName();
+         }
+
+      } else {
+         celebrityName = "DATA IS NOT PROPERLY DEFINED, MORE THAN ONE CELEBRITY CANDIDATE WAS FOUND";
       }
-      
+
       return celebrityName;
    }
 
@@ -41,7 +58,7 @@ public class Analyzer {
       return new HashSet<Person>(team.getMembers());
    }
 
-   public Set<Person> getAllPersonsThatKnowsSomebody() {
+   public Set<Person> getAllPersonsWhoKnowSomebody() {
       Set<Person> response = new HashSet<>();
 
       for (Relationship relationship : team.getRelationships()) {
@@ -51,17 +68,7 @@ public class Analyzer {
       return response;
    }
 
-   public Set<Person> getAllKnownPersons() {
-      Set<Person> response = new HashSet<>();
-
-      for (Relationship relationship : team.getRelationships()) {
-         response.add(relationship.getKnowsTo());
-      }
-
-      return response;
-   }
-
-   public ArrayList<Set<Person>> getEachMemberKnownPersonsSet() {
+   public ArrayList<Set<Person>> getEachMemberKnownPersons() {
       ArrayList<Set<Person>> knownPersonPerMember = new ArrayList<Set<Person>>();
 
       // First we determine each member known persons
@@ -77,14 +84,19 @@ public class Analyzer {
 
       return knownPersonPerMember;
    }
+
    
-   public Set<Person> getCelebrityCandidates(ArrayList<Set<Person>> eachMemberKnownPersons){
-      //All team members are candidates to be the celebrity
+   /**
+    * @param eachMemberKnownPersons is the list of sets that represent each team member known Persons
+    * @return the Set of Celebrity candidates (All Persons that are known by everybody)
+    */
+   public Set<Person> getCelebrityCandidates(ArrayList<Set<Person>> eachMemberKnownPersons) {
+      // All team members are candidates to be the celebrity
       Set<Person> response = getTeamMembersAsSet();
-      for (Set<Person> knownPersonsSet : eachMemberKnownPersons){
-         //Recurrent intersection
-         if(knownPersonsSet.size()>0) //if the member doesnt knowks somebody is ignorated
-         response.retainAll(knownPersonsSet);
+      for (Set<Person> knownPersonsSet : eachMemberKnownPersons) {
+         // if the member doesn't knows somebody: intersection is skipped to avoid empty set
+         if (knownPersonsSet.size() > 0)
+            response.retainAll(knownPersonsSet); // Recurrent Set intersection
       }
       return response;
    }

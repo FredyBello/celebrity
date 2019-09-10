@@ -17,8 +17,8 @@ public class AnalyzerTest {
    Person personB = new Person("Person B");
    Person personC = new Person("Person C");
    Person personD = new Person("Person D");
-   Person personE = new Person("Person E"); //Person E is the celebrity
-   
+   Person personE = new Person("Person E"); // Person E is the celebrity
+
    @Before
    public void init() {
 
@@ -53,21 +53,15 @@ public class AnalyzerTest {
    }
 
    @Test
-   public void canCreateAnAnalyzer() {
+   public void canDetermineCelebrityName() {
       Team team = new Team(members);
       team.setRelationships(relationships);
       Analyzer analyzer = new Analyzer(team);
       assertTrue(analyzer.getTeam().getTeamSize() == members.size());
       assertTrue(analyzer.getTeam().getRelationships().size() == relationships.size());
+      assertTrue(analyzer.getTeamMembersAsSet().size() == 5);
 
-      Set<Person> teamMembers = analyzer.getTeamMembersAsSet();
-      assertTrue(teamMembers.size() == 5);
-
-      Set<Person> personsThatKnowsSomebody = analyzer.getAllPersonsThatKnowsSomebody();
-      assertTrue(personsThatKnowsSomebody.size() == 4);
-
-      Set<Person> knownPersons = analyzer.getAllKnownPersons();
-      assertTrue(knownPersons.size() == 4);
+      // Celebrity must be "Person E"
       assertEquals(personE.getName(), analyzer.getCelebrityName());
    }
 }
